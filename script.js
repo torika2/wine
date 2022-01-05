@@ -27,16 +27,33 @@ let wines = [
 		image:'./images/wine2.jpg',
 		is_active:false,
 	},
-
 ]
-
+let money = 1000
 setWines =(data,div_id,input_default_value=1)=>{
 	let main = document.getElementById(div_id)
+	document.getElementById(div_id).innerHTML=""
 	data.map((item)=>{
 		let div = document.createElement('div')
-		div.setAttribute('class','col-md-4 mt-2 mb-2')
+		div.setAttribute('class','col-md-4 mt-5 mb-2')
+		let is_modal = (div_id==='cart-init')?true:false
+		let quantity = (is_modal)?item.quantity:input_default_value
+		let obj = {
+			button:{
+				title:(is_modal)?'Edit':'Add',
+				class:(is_modal)?'btn-warning':'btn-success',
+				onSubmit:(is_modal)?`editItemQuantity(item_quantity${item.id}, ${item.quantity}, this)`:"setCartQuantity(this,'quantity')",
+				delete:(is_modal)?'box':'none',
+			},
+		}
+		let item_div_id = `${obj.button.title}wine${item.id}`
+		div.setAttribute('id',item_div_id)
 		div.innerHTML=`
-			<div class="bg-white p-3 shadow" style="border-radius:8px;overflow: hidden;">
+			<div class="bg-white p-3 shadow position-relative" style="border-radius:8px;overflow: hidden;">
+				<div class="position-absolute" style="display:${obj.button.delete};top:0px;right:0px;">
+					<button class="btn btn-danger" onclick="deleteItem(${item_div_id})">
+						X
+					</button>
+				</div>
 				<div>
 					<h4 class="font-weight-bold">
 						${item.name}
@@ -48,16 +65,16 @@ setWines =(data,div_id,input_default_value=1)=>{
 				<div class="mt-2">
 					<b>${item.description} </b>
 				</div>
-				<form action="javascript:void(0)" onSubmit="setCartQuantity(this,'quantity')">
+				<form action="javascript:void(0)" onSubmit="${obj.button.onSubmit}">
 					<div class="mt-2 d-flex flex-nowrap justify-content-center align-items-center">
 						<div class="col-md-9 d-flex  justify-content-start align-items-center">
-							<div style=";width:35%;">
-								<input type="number" class="form-control" value="${input_default_value}">
+							<div class="col-md-6">
+								<input type="number" id="item_quantity${item.id}" class="form-control" value="${quantity}">
 								<input type="hidden" class="form-control" value="${item.id}">
 							</div>
-							<div style="margin-left:10px;">
-								<button class="btn btn-success ">
-									Add
+							<div class="col-md-8" style="margin-left:10px;">
+								<button class="btn ${obj.button.class}">
+									${obj.button.title}
 								</button>
 							</div>
 						</div>
@@ -102,34 +119,33 @@ setCartQuantity =(event, div_id)=> {
 	let div = document.getElementById(div_id)
 	div.innerText = number
 	alert(`წარმატებით დაემატა ${number}ცალი ჩამონათვალში.`)
+	this.setWines(cart,'cart-init')
 }
 
-makeModalDiv =(name, div_append_direction)=> {
-	let background = document.createElement('div')
-	background.setAttribute('style','z-index:1;display:box;padding:10px;background-color: rgba(0, 0, 0, 0.4);top:0;left:0;position:absolute;width:100%;height:100vh;')
-	background.onclick = (event)=>{
-		event.target.setAttribute('style','z-index:1;display:none!important;')
+editItemQuantity =(item_id, quantity, step)=>{
+	document.getElementById(item_id).value = quantity+step
+}
+
+deleteItem =(item)=> {
+	document.getElementById(item.id).remove()
+}
+
+modalFunction =(name, div_append_direction="list")=> {
+	let modal = document.getElementById(name)
+	if(modal){
+		// let display = (modal.style.display==='none' && modal.style.display==='')?'open-modal':'closed-modal'
+		let class_name = 'closed-modal' 
+		modal.classList.forEach((cls)=>{
+		  if(cls === 'closed-modal'){
+		    class_name = 'open-modal'
+		  }
+		})
+		modal.setAttribute('class',`${class_name} cart-modal d-flex justify-content-center align-items-center`)
 	}
-	background.setAttribute('class', 'd-flex justify-content-center align-items-center')
-	background.setAttribute('id', name)
-
-	let div = document.createElement('div')
-	div.setAttribute('class','shadow p-3 bg-white d-flex')
-	div.setAttribute('style','z-index:2;border-radius:8px;height:60vh;width:50%;')
-	this.setWines(cart,div_append_direction)
-	background.appendChild(div)
-	document.getElementById(div_append_direction).appendChild(background)
 }
-
-modalFunction =(name, div_append_direction="body")=>{
-	this.makeModalDiv(name,div_append_direction)
-	setTimeout(()=>{
-		let modal = document.getElementById(name)
-		if(modal){
-			let display = (modal.style.display==='none' && modal.style.display==='')?'box':'none'
-			modal.style.display = `${display}!important`
-		}
-	},500)
+closeCartModal =()=> {
+	let div = document.getElementById('cart')
+	div.setAttribute('class',`closed-modal cart-modal d-flex justify-content-center align-items-center`)
 }
 
 this.setWines(wines,'list')
