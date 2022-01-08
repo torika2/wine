@@ -34,7 +34,7 @@ setWines =(data,div_id,input_default_value=1)=>{
 	document.getElementById(div_id).innerHTML=""
 	data.map((item)=>{
 		let div = document.createElement('div')
-		div.setAttribute('class','col-md-4 mt-5 mb-2')
+		div.setAttribute('class','col-12 col-sm-12 col-md-6 col-xl-4 mt-5 mb-2')
 		let is_modal = (div_id==='cart-init')?true:false
 		let quantity = (is_modal)?item.quantity:input_default_value
 		let obj = {
@@ -66,20 +66,20 @@ setWines =(data,div_id,input_default_value=1)=>{
 					<b>${item.description} </b>
 				</div>
 				<form action="javascript:void(0)" onSubmit="${obj.button.onSubmit}">
-					<div class="mt-2 d-flex flex-nowrap justify-content-center align-items-center">
-						<div class="col-md-9 d-flex  justify-content-start align-items-center">
-							<div class="col-md-6">
+					<div class="mt-2 row justify-content-between">
+						<div class="col-md-12 col-12 col-sm-12 col-xl-9 d-flex">
+							<div class="col-md-9 m-0 pl-0">
 								<input type="number" id="item_quantity${item.id}" class="form-control" value="${quantity}">
-								<input type="hidden" class="form-control" value="${item.id}">
 							</div>
-							<div class="col-md-8" style="margin-left:10px;">
-								<button class="btn ${obj.button.class}">
+							<div class="col-md-3 p-0 m-0">
+								<input type="hidden" class="form-control" value="${item.id}">
+								<button style="width:100%;" class="btn ${obj.button.class}">
 									${obj.button.title}
 								</button>
 							</div>
 						</div>
-						<div class="col-md-3 d-flex justify-content-end">
-							<button class="btn btn-dark">
+						<div class="col-md-12 col-12 col-sm-12 col-xl-3 mt-2 mt-sm-2 mt-md-2 mt-xl-0">
+							<button class="btn btn-dark" style="width:100%;">
 								<i class="fa fa-eye" aria-hidden="true"></i>
 							</button>
 						</div>
@@ -143,9 +143,11 @@ modalFunction =(name, div_append_direction="list")=> {
 		modal.setAttribute('class',`${class_name} cart-modal d-flex justify-content-center align-items-center`)
 	}
 }
-closeCartModal =()=> {
-	let div = document.getElementById('cart')
+closeCartModal =(div_id)=> {
+	let div = document.getElementById(div_id)
 	div.setAttribute('class',`closed-modal cart-modal d-flex justify-content-center align-items-center`)
 }
+addWine =(event)=> {
 
+}
 this.setWines(wines,'list')
