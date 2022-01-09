@@ -118,7 +118,7 @@ setCartQuantity =(event, div_id)=> {
 
 	let div = document.getElementById(div_id)
 	div.innerText = number
-	alert(`წარმატებით დაემატა ${number}ცალი ჩამონათვალში.`)
+	alert(`წარმატებით დაემატა ${input}ცალი ჩამონათვალში.`)
 	this.setWines(cart,'cart-init')
 }
 
