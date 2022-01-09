@@ -50,7 +50,7 @@ setWines =(data,div_id,input_default_value=1)=>{
 		div.innerHTML=`
 			<div class="bg-white p-3 shadow position-relative" style="border-radius:8px;overflow: hidden;">
 				<div class="position-absolute" style="display:${obj.button.delete};top:0px;right:0px;">
-					<button class="btn btn-danger" onclick="deleteItem(${item_div_id})">
+					<button class="btn btn-danger" onclick="deleteItem(${item_div_id},${item.id})">
 						X
 					</button>
 				</div>
@@ -98,6 +98,7 @@ setCartQuantity =(event, div_id)=> {
 	let input = (parseInt(event[0].value) > 0)?parseInt(event[0].value):1
 	let bottle_id = parseInt(event[1].value)
 	let obj = wines.find((wine)=>wine.id === bottle_id)
+	console.log(input,bottle_id,obj)
 
 	obj['quantity'] = (obj['quantity'] === undefined)?input:obj['quantity']
 	let is_exist = false
@@ -122,10 +123,28 @@ setCartQuantity =(event, div_id)=> {
 }
 
 editItemQuantity =(item_id, quantity, step)=>{
-	document.getElementById(item_id).value = quantity+step
+	let quantity_cart_div = document.getElementById('quantity')
+	let new_quantity = parseInt(step[0].value)
+	let counted = 0
+	let cart_item_id = parseInt(step[1].value)
+	cart.map((item)=>{
+		if(cart_item_id === item.id){
+			item.quantity = new_quantity
+		}
+		counted += item.quantity
+	})
+	quantity_cart_div.innerText = counted
 }
 
-deleteItem =(item)=> {
+deleteItem =(item, item_id)=> {
+	let counter = 0
+	cart.map((item)=>{
+		if(item_id === item.id){
+			counter = item.quantity
+		}
+	})
+	let quantity_cart_div = document.getElementById('quantity')
+	quantity_cart_div.innerText = parseInt(quantity_cart_div.innerText)-counter
 	document.getElementById(item.id).remove()
 }
 
@@ -157,7 +176,6 @@ addWine =(event)=> {
 		name:event[0].value,
 		description:event[1].value,
 		image:image,
-		quantity:0,
 		is_active:false,
 	}
 	
