@@ -79,13 +79,12 @@ setWines =(data,div_id,input_default_value=1)=>{
 							</div>
 						</div>
 						<div class="col-md-12 col-12 col-sm-12 col-xl-3 mt-2 mt-sm-2 mt-md-2 mt-xl-0">
-							<button class="btn btn-dark" style="width:100%;">
+							<div class="btn btn-dark" style="width:100%;">
 								<i class="fa fa-eye" aria-hidden="true"></i>
-							</button>
+							</div>
 						</div>
 					</div>
 				</form>
-
 			</div>
 		`
 		main.appendChild(div)
@@ -148,6 +147,21 @@ closeCartModal =(div_id)=> {
 	div.setAttribute('class',`closed-modal cart-modal d-flex justify-content-center align-items-center`)
 }
 addWine =(event)=> {
+	let max = 2
+	let min = 1
+	let random = Math.floor(Math.random() * (max - min + 1)) + min
+	let image = URL.createObjectURL(event[2].files[0])
 
+	let obj = {
+		id:wines[wines.length-1].id+1,
+		name:event[0].value,
+		description:event[1].value,
+		image:image,
+		quantity:0,
+		is_active:false,
+	}
+	
+	wines.push(obj)
+	this.setWines(wines,'list')
 }
 this.setWines(wines,'list')
