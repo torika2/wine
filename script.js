@@ -28,7 +28,7 @@ let wines = [
 		is_active:false,
 	},
 ]
-let money = 1000
+
 setWines =(data,div_id,input_default_value=1)=>{
 	let main = document.getElementById(div_id)
 	document.getElementById(div_id).innerHTML=""
@@ -91,7 +91,6 @@ setWines =(data,div_id,input_default_value=1)=>{
 	})
 }
 
-
 let cart = []
 
 setCartQuantity =(event, div_id)=> {
@@ -151,7 +150,6 @@ deleteItem =(item, item_id)=> {
 modalFunction =(name, div_append_direction="list")=> {
 	let modal = document.getElementById(name)
 	if(modal){
-		// let display = (modal.style.display==='none' && modal.style.display==='')?'open-modal':'closed-modal'
 		let class_name = 'closed-modal' 
 		modal.classList.forEach((cls)=>{
 		  if(cls === 'closed-modal'){
@@ -161,14 +159,13 @@ modalFunction =(name, div_append_direction="list")=> {
 		modal.setAttribute('class',`${class_name} cart-modal d-flex justify-content-center align-items-center`)
 	}
 }
+
 closeCartModal =(div_id)=> {
 	let div = document.getElementById(div_id)
 	div.setAttribute('class',`closed-modal cart-modal d-flex justify-content-center align-items-center`)
 }
+
 addWine =(event)=> {
-	let max = 2
-	let min = 1
-	let random = Math.floor(Math.random() * (max - min + 1)) + min
 	let image = URL.createObjectURL(event[2].files[0])
 
 	let obj = {
@@ -182,4 +179,5 @@ addWine =(event)=> {
 	wines.push(obj)
 	this.setWines(wines,'list')
 }
+
 this.setWines(wines,'list')
